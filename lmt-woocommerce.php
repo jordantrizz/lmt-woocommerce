@@ -30,9 +30,6 @@ function jk_woocommerce_available_variation( $args ) {
         return $args;
 }
 
-/* Move the Coupon Code field to */
-add_action( 'woocommerce_review_order_before_payment', 'woocommerce_checkout_coupon_form', 10 );
-
 /* Enable Hook Debugging
 $debug_tags = array();
 add_action( 'all', function ( $tag ) {
