@@ -42,4 +42,33 @@ add_action( 'all', function ( $tag ) {
 } );
 */
 
+add_filter('woocommerce_package_rates', 'wf_sort_shipping_methods', 10, 2);
+
+function wf_sort_shipping_methods($available_shipping_methods, $package)
+{
+	// Arrange shipping methods as per your requirement
+	$sort_order	= array(
+		'wf_shipping_ups'	=>	array(),
+		'wf_shipping_usps'	=>	array(),
+		'free_shipping'		=>	array(),
+		'local_pickup'		=>	array(),
+		'legacy_flat_rate'	=>	array(),		
+	);
+	
+	// unsetting all methods that needs to be sorted
+	foreach($available_shipping_methods as $carrier_id => $carrier){
+		$carrier_name	=	current(explode(":",$carrier_id));
+		if(array_key_exists($carrier_name,$sort_order)){
+			$sort_order[$carrier_name][$carrier_id]	=		$available_shipping_methods[$carrier_id];
+			unset($available_shipping_methods[$carrier_id]);
+		}
+	}
+	
+	// adding methods again according to sort order array
+	foreach($sort_order as $carriers){
+		$available_shipping_methods	=	array_merge($available_shipping_methods,$carriers);
+	}
+	return $available_shipping_methods;
+}
+
 ?>
